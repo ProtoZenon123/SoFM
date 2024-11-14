@@ -1,0 +1,6 @@
+DATA_ALL/
+WEIGHTS_ALL/
+siamesenn_env/
+**/__pycache__/
+**/.pytest_cache/
+**/*.pyc
