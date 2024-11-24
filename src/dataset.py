@@ -6,10 +6,11 @@ from tqdm import tqdm
 
 
 class SiameseNetworkDataset(Dataset):
-    def __init__(self, image_folder_dir, transform=None):
+    def __init__(self, image_folder_dir, transform=None, component="all"):
         self.image_folder_dir = image_folder_dir
         self.transform = transform
         self.pimages = []
+        self.component = component
         self._load_data()
     
     def _load_data(self):
@@ -20,21 +21,24 @@ class SiameseNetworkDataset(Dataset):
                 lb = False
             image_folder_dir_lb = os.path.join(self.image_folder_dir, label)
             for comp in os.listdir(image_folder_dir_lb):
-                comp_images_dir = os.path.join(image_folder_dir_lb, comp)
-                cnt = 0
-                for pair_image_dir in tqdm(os.listdir(comp_images_dir),desc=f"Loading {comp} data in folder {label}", leave=False):
-                    try:
-                        pimage_path = os.path.join(comp_images_dir, pair_image_dir)
-                        pimage = os.listdir(pimage_path)
-                        self.pimages.append({
-                            'image1': os.path.join(pimage_path, pimage[0]),
-                            'image2': os.path.join(pimage_path, pimage[1]),
-                            'label': lb
-                        })
-                        cnt += 1
-                    except:
-                        print(f"Invalid image folder at: {pimage_path}")
-                print(f"{comp} data: {cnt} pairs of images.")
+                if comp == self.component or self.component == "all":
+                    comp_images_dir = os.path.join(image_folder_dir_lb, comp)
+                    cnt = 0
+                    for pair_image_dir in tqdm(os.listdir(comp_images_dir),desc=f"Loading {comp} data in folder {label}", leave=False):
+                        try:
+                            pimage_path = os.path.join(comp_images_dir, pair_image_dir)
+                            pimage = os.listdir(pimage_path)
+                            self.pimages.append({
+                                'image1': os.path.join(pimage_path, pimage[0]),
+                                'image2': os.path.join(pimage_path, pimage[1]),
+                                'label': lb
+                            })
+                            cnt += 1
+                        except:
+                            print(f"Invalid image folder at: {pimage_path}")
+                    print(f"{comp} data: {cnt} pairs of images.")
+                    print(f"The {comp} data is saved at {comp_images_dir}")
+                
             
         print(f"Data loading completed.")
         print(f"Total pairs of images: {len(self.pimages)}")
@@ -61,10 +65,10 @@ if __name__ == '__main__':
     transform = transforms.Compose([transforms.Resize((2, 2)),
                                     transforms.ToTensor()
                                     ])
-    image_folder_dir = '/media/nguyenminhquan/fshit/SymmetricalMakeup/data/train_data'
+    image_folder_dir = '..'
     my_dataset = SiameseNetworkDataset(image_folder_dir=image_folder_dir,
-                                       transform=transform)
+                                       transform=transform, component="lip")
     
-    for item in my_dataset:
-        print(item)
+    # for item in my_dataset:
+    #     print(item)
     

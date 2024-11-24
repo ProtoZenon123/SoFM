@@ -12,7 +12,7 @@ class siameseNN(nn.Module):
             nn.Conv2d(num_features*2, num_features*4, 4),#256*8*8
             nn.BatchNorm2d(num_features*4),
             nn.ReLU()
-        )
+        )   
         self.fc1 = nn.Sequential(
             nn.Linear(256*8*8, 4096),
             nn.Sigmoid()
