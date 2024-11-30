@@ -136,8 +136,8 @@ def training(args):
     global figures_dir
     figures_dir = config['figures_dir']
     
-    folder_weights_dir += f"/{args.model_type}"
-    figures_dir += f"/{args.model_type}"
+    folder_weights_dir += f"/{args.component}/{args.model_type}"
+    figures_dir += f"/{args.component}/{args.model_type}"
     os.makedirs(folder_weights_dir, exist_ok=True)
     os.makedirs(figures_dir, exist_ok=True)
 
@@ -340,7 +340,7 @@ def evaluate(args):
     train_dir = config['train_dir']
     folder_weights_dir = config['folder_weights_dir']
     
-    folder_weights_dir += f"/{args.model_type}"
+    folder_weights_dir += f"/{args.component}/{args.model_type}"
     os.makedirs(folder_weights_dir, exist_ok=True)
 
     base_dir = os.path.dirname(train_dir)
@@ -393,11 +393,13 @@ def evaluate(args):
         criterion = contrastive_loss(margin)
 
     sia_model.load_state_dict(torch.load(last_weights_path))
+    sia_model = sia_model.to(device)
     accuracy, loss = testing(dataloader, sia_model, criterion, device, threshold, margin, args.model_type)
-    print(f"Accuracy with final weight: {accuracy:.2f}%")
-    print(f"Loss with final weight: {loss:.8f}")
+    print(f"Accuracy with last weight: {accuracy:.2f}%")
+    print(f"Loss with last weight: {loss:.8f}")
     
     sia_model.load_state_dict(torch.load(min_loss_weights_path))
+    sia_model = sia_model.to(device)
     accuracy, loss = testing(dataloader, sia_model, criterion, device, threshold, margin, args.model_type)
     print(f"Accuracy with min_loss weight: {accuracy:.2f}%")
     print(f"Loss with min_loss weight: {loss:.8f}")

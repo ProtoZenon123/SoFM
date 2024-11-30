@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import os
-import config, config_eye, config_cheek, config_lip
+import config
 import shutil
 import random
 import math
