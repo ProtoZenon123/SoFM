@@ -97,7 +97,7 @@ class siameseCNN_Contrast_Inter(nn.Module):
         self.fc1 = nn.Sequential(
             nn.Linear(256*8*8, 4096),
             nn.ReLU(inplace=True),
-            nn.Linear(4096, 121)
+            nn.Linear(4096, 128)
         )
         
     def _block(self, in_channels, out_channels, kernel_size):

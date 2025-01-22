@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from torch import optim
 from torch.utils.data import DataLoader
 
-from utils import load_config, plot, devide_data
+from utils import load_config, plot
 from siamese_cnn import siameseCNN_BCE, siameseCNN_Contrast_Origin, siameseCNN_Contrast_Inter
 import dataset
 from loss import contrastive_loss
@@ -131,13 +131,14 @@ def training(args):
     threshold = config['threshold']
     cuda_id = config['cuda_id']
     margin = config['margin']
+    weight_decay = config['weight_decay']
     train_dir = config['train_dir']
     folder_weights_dir = config['folder_weights_dir']
     global figures_dir
     figures_dir = config['figures_dir']
     
-    folder_weights_dir += f"/{args.component}/{args.model_type}"
-    figures_dir += f"/{args.component}/{args.model_type}"
+    folder_weights_dir += f"/{args.component}/{args.model_type}/{margin}"
+    figures_dir += f"/{args.component}/{args.model_type}/{margin}"
     os.makedirs(folder_weights_dir, exist_ok=True)
     os.makedirs(figures_dir, exist_ok=True)
 
@@ -149,10 +150,6 @@ def training(args):
     min_loss_weights_path = os.path.join(folder_weights_dir, min_loss_weights_filename)
     last_weight_path = os.path.join(folder_weights_dir, last_weight_filename)
     
-    # Split the training data to create validation data and test data (depend on mode_split_data)
-    if args.mode_split_data == 0:
-        devide_data(train_dir)
-
     # transform
     transform = None
     if args.model_type == "BCE" or args.model_type == "contrast_inter":
@@ -203,8 +200,11 @@ def training(args):
         criterion = contrastive_loss(margin)
 
     # optimizer
-    optimizer = optim.Adam(sia_model.parameters(), lr=learning_rate)
-
+    optimizer = None
+    if args.model_type == "BCE" or args.model_type == "contrast_inter":
+        optimizer = optim.Adam(sia_model.parameters(), lr=learning_rate, weight_decay=weight_decay)
+    if args.model_type == "contrast_origin":
+        optimizer = optim.Adam(sia_model.parameters(), lr=0.0005)
     # if pretraining available
     if args.is_pretrained == 1:
         sia_model.load_state_dict(torch.load(last_weight_path))
@@ -229,6 +229,8 @@ def training(args):
     print(f'\tDEVICE: {cuda}')
     print(f'\tCHANNELS_IMAGE: {channels_img}')
     print(f'\tNUM_FEATURES: {num_features}')
+    print(f'\tMARGIN: {margin}')
+    print(f'\tTHRESHOLD: {threshold}')
     print(f'\tCRITERION: {criterion}')
     print(f'\tOPTIMIZER: {optimizer}')
 
@@ -340,7 +342,7 @@ def evaluate(args):
     train_dir = config['train_dir']
     folder_weights_dir = config['folder_weights_dir']
     
-    folder_weights_dir += f"/{args.component}/{args.model_type}"
+    folder_weights_dir += f"/{args.component}/{args.model_type}/{margin}"
     os.makedirs(folder_weights_dir, exist_ok=True)
 
     base_dir = os.path.dirname(train_dir)
@@ -384,6 +386,14 @@ def evaluate(args):
         sia_model = siameseCNN_Contrast_Origin(channels_img, num_features)
     if args.model_type == "contrast_inter":
         sia_model = siameseCNN_Contrast_Inter(channels_img, num_features)
+        
+    sia_model_2 = None
+    if args.model_type == "BCE":
+        sia_model_2 = siameseCNN_BCE(channels_img, num_features)
+    if args.model_type == "contrast_origin":
+        sia_model_2 = siameseCNN_Contrast_Origin(channels_img, num_features)
+    if args.model_type == "contrast_inter":
+        sia_model_2 = siameseCNN_Contrast_Inter(channels_img, num_features)
     
     # criterion
     criterion = None

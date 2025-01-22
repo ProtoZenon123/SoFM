@@ -27,13 +27,17 @@ class SiameseNetworkDataset(Dataset):
                     for pair_image_dir in tqdm(os.listdir(comp_images_dir),desc=f"Loading {comp} data in folder {label}", leave=False):
                         try:
                             pimage_path = os.path.join(comp_images_dir, pair_image_dir)
-                            pimage = os.listdir(pimage_path)
-                            self.pimages.append({
-                                'image1': os.path.join(pimage_path, pimage[0]),
-                                'image2': os.path.join(pimage_path, pimage[1]),
-                                'label': lb
-                            })
-                            cnt += 1
+                            if os.path.exists(pimage_path):
+                                pimage = os.listdir(pimage_path)
+                                image1_path = os.path.join(pimage_path, pimage[0])
+                                image2_path = os.path.join(pimage_path, pimage[1])
+                                if os.path.exists(image1_path) and os.path.exists(image2_path):
+                                    self.pimages.append({
+                                        'image1': image1_path,
+                                        'image2': image2_path,
+                                        'label': lb
+                                    })
+                                    cnt += 1
                         except:
                             print(f"Invalid image folder at: {pimage_path}")
                     print(f"{comp} data: {cnt} pairs of images.")
@@ -65,7 +69,7 @@ if __name__ == '__main__':
     transform = transforms.Compose([transforms.Resize((2, 2)),
                                     transforms.ToTensor()
                                     ])
-    image_folder_dir = '..'
+    image_folder_dir = '/mnt/2E287FDD287FA28F/teamAI/MinhQuan/siamesenn/Symetry-of-Facial-Makeup/SoFM/DATA_ALL/data4train/data/train_data'
     my_dataset = SiameseNetworkDataset(image_folder_dir=image_folder_dir,
                                        transform=transform, component="lip")
     

@@ -373,156 +373,99 @@ def crop_and_transform_six_parts(image):
 
     return left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip
 
+def process_lb(inp_dir, out_dir):
+    for component in os.listdir(inp_dir):            
+        for sub_folder in os.listdir(os.path.join(inp_dir, component)):
+            for image_name in tqdm(os.listdir(os.path.join(inp_dir, component, sub_folder)), desc=f"{sub_folder} of {component} in {inp_dir}"):
+                image_path = os.path.join(inp_dir, component, sub_folder, image_name)
+                image = cv2.imread(image_path)
+                
+                if image is not None:
+                    image = cv2.resize(image, (512, 512))
+                    left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip = crop_and_transform_six_parts(image)
+                    name = image_name.split('.')[0]
+
+                    if component[0] == 'E':
+                        save_dir = os.path.join(out_dir, 'eye', name)
+                        os.makedirs(save_dir, exist_ok=True)
+                        cv2.imwrite(os.path.join(save_dir, 'left_eye.png'), left_eye)
+                        cv2.imwrite(os.path.join(save_dir, 'right_eye.png'), right_eye)
+                    elif component[0] == 'L':
+                        save_dir = os.path.join(out_dir, 'lip', name)
+                        os.makedirs(save_dir, exist_ok=True)
+                        cv2.imwrite(os.path.join(save_dir, 'left_lip.png'), left_lip)
+                        cv2.imwrite(os.path.join(save_dir, 'right_lip.png'), right_lip)
+                    elif component[0] == 'C':
+                        save_dir = os.path.join(out_dir, 'cheek', name)
+                        os.makedirs(save_dir, exist_ok=True)
+                        cv2.imwrite(os.path.join(save_dir, 'left_cheek.png'), left_cheek)
+                        cv2.imwrite(os.path.join(save_dir, 'right_cheek.png'), right_cheek)
+                    else:
+                        save_dir = out_dir
+                        save_dir = os.path.join(out_dir, 'eye', name)
+                        os.makedirs(save_dir, exist_ok=True)
+                        cv2.imwrite(os.path.join(save_dir, 'left_eye.png'), left_eye)
+                        cv2.imwrite(os.path.join(save_dir, 'right_eye.png'), right_eye)
+                        save_dir = os.path.join(out_dir, 'lip', name)
+                        os.makedirs(save_dir, exist_ok=True)
+                        cv2.imwrite(os.path.join(save_dir, 'left_lip.png'), left_lip)
+                        cv2.imwrite(os.path.join(save_dir, 'right_lip.png'), right_lip)
+                        save_dir = os.path.join(out_dir, 'cheek', name)
+                        os.makedirs(save_dir, exist_ok=True)
+                        cv2.imwrite(os.path.join(save_dir, 'left_cheek.png'), left_cheek)
+                        cv2.imwrite(os.path.join(save_dir, 'right_cheek.png'), right_cheek)
+                        
+# def process_lb0(inp_dir, out_dir):
+#     for component in os.listdir(inp_dir):            
+#         for sub_folder in os.listdir(os.path.join(inp_dir, component)):
+#             for image_name in os.listdir(os.path.join(inp_dir, component, sub_folder)):
+#                 image_path = os.path.join(inp_dir, component, sub_folder, image_name)
+#                 image = cv2.imread(image_path)
+                
+#                 if image is not None:
+#                     image = cv2.resize(image, (512, 512))
+#                     left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip = crop_and_transform_six_parts(image)
+#                     name = image_name.split('.')[0]
+
+#                     if component[0] == 'E':
+#                         save_dir = os.path.join(out_dir, 'eye', name)
+#                         os.makedirs(save_dir, exist_ok=True)
+#                         cv2.imwrite(os.path.join(save_dir, 'left_eye.png'), left_eye)
+#                         cv2.imwrite(os.path.join(save_dir, 'right_eye.png'), right_eye)
+#                     elif component[0] == 'L':
+#                         save_dir = os.path.join(out_dir, 'lip', name)
+#                         os.makedirs(save_dir, exist_ok=True)
+#                         cv2.imwrite(os.path.join(save_dir, 'left_lip.png'), left_lip)
+#                         cv2.imwrite(os.path.join(save_dir, 'right_lip.png'), right_lip)
+#                     elif component[0] == 'C':
+#                         save_dir = os.path.join(out_dir, 'cheek', name)
+#                         os.makedirs(save_dir, exist_ok=True)
+#                         cv2.imwrite(os.path.join(save_dir, 'left_cheek.png'), left_cheek)
+#                         cv2.imwrite(os.path.join(save_dir, 'right_cheek.png'), right_cheek)
+#                     else:
+#                         save_dir = out_dir
+#                         save_dir = os.path.join(out_dir, 'eye', name)
+#                         os.makedirs(save_dir, exist_ok=True)
+#                         cv2.imwrite(os.path.join(save_dir, 'left_eye.png'), left_eye)
+#                         cv2.imwrite(os.path.join(save_dir, 'right_eye.png'), right_eye)
+#                         save_dir = os.path.join(out_dir, 'lip', name)
+#                         os.makedirs(save_dir, exist_ok=True)
+#                         cv2.imwrite(os.path.join(save_dir, 'left_lip.png'), left_lip)
+#                         cv2.imwrite(os.path.join(save_dir, 'right_lip.png'), right_lip)
+#                         save_dir = os.path.join(out_dir, 'cheek', name)
+#                         os.makedirs(save_dir, exist_ok=True)
+#                         cv2.imwrite(os.path.join(save_dir, 'left_cheek.png'), left_cheek)
+#                         cv2.imwrite(os.path.join(save_dir, 'right_cheek.png'), right_cheek)              
+                    
+            
 if __name__ == '__main__':
-    
-    ######################################################################################################
-    ###############            skip crop cheek
-    ######################################################################################################
-    
-    
-    # folder_image = '/mnt/2E287FDD287FA28F/teamAI/hong/FACE_DATA/1210_DATA_POSE/make/make_good_mini'
-    # output_folder = '/mnt/2E287FDD287FA28F/teamAI/hong/FACE_DATA/1210_DATA_POSE/make'
-    # os.makedirs(output_folder, exist_ok=True)
-    # for image_name in os.listdir(folder_image):
-    #     image_path = os.path.join(folder_image, image_name)
-    #     image = cv2.imread(image_path)
-    #     output_folder_image = os.path.join(output_folder, image_name)
-    #     os.makedirs(output_folder_image, exist_ok=True)
-    #     left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip = crop_and_transform_six_parts(image)
-        
-    #     cv2.imwrite(os.path.join(output_folder_image, 'left_e.jpg'), left_eye)
-    #     cv2.imwrite(os.path.join(output_folder_image, 'right_e.jpg'), right_eye)
-    #     cv2.imwrite(os.path.join(output_folder_image, 'left_c.jpg'), left_cheek)
-    #     cv2.imwrite(os.path.join(output_folder_image, 'right_c.jpg'), right_cheek)
-    #     cv2.imwrite(os.path.join(output_folder_image, 'left_l.jpg'), left_lip)
-    #     cv2.imwrite(os.path.join(output_folder_image, 'right_l.jpg'), right_lip)
     
     #-------------------------------------------------------------------------------------------------------
     #------------------------------------------- LABEL 1 ---------------------------------------------------
     #-------------------------------------------------------------------------------------------------------
     
-    input_folder = '/mnt/2E287FDD287FA28F/teamAI/hong/DATA4SOFM/DATA_2109/LABEL1'
-    output_folder = '/mnt/2E287FDD287FA28F/teamAI/MinhQuan/siamesenn/Symetry-of-Facial-Makeup/ProtoZenon123-Symmetry-of-Facial-Make-up/DATA_ALL/data/train_data'
-    output_folder_lb1 = os.path.join(output_folder, 'label_1')
-
-    eye_folder = os.path.join(output_folder_lb1, 'eye')
-    cheek_folder = os.path.join(output_folder_lb1, 'cheek')
-    lip_folder = os.path.join(output_folder_lb1, 'lip')
-    
-    os.makedirs(eye_folder, exist_ok=True)
-    os.makedirs(cheek_folder, exist_ok=True)
-    os.makedirs(lip_folder, exist_ok=True)
-    
-    for cpnt_folder in os.listdir(input_folder):
-        cpnt_folder_dir = os.path.join(input_folder, cpnt_folder)
-        for sub_folder in os.listdir(cpnt_folder_dir):
-            sub_folder_dir = os.path.join(cpnt_folder_dir, sub_folder)
-            for image_name in tqdm(os.listdir(sub_folder_dir), desc="crop for train_data lb1", leave=False):
-                image_path = os.path.join(sub_folder_dir, image_name)
-                image = cv2.imread(image_path)
-                if image is not None:
-                    if cpnt_folder[0] == 'E':
-                        image = cv2.resize(image, (512, 512))
-                        
-                        left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip = crop_and_transform_six_parts(image)
-                        
-                        name = image_name.split('.')[0]
-                        
-                        save_folder = os.path.join(eye_folder, name)
-                        os.makedirs(save_folder, exist_ok=True)
-                        cv2.imwrite(os.path.join(save_folder, 'left_eye.png'), left_eye)
-                        cv2.imwrite(os.path.join(save_folder, 'right_eye.png'), right_eye)
-                    
-                if image is not None:
-                    if cpnt_folder[0] == 'C':
-                        image = cv2.resize(image, (512, 512))
-                        
-                        left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip = crop_and_transform_six_parts(image)
-                        
-                        name = image_name.split('.')[0]
-                        
-                        save_folder = os.path.join(cheek_folder, name)
-                        os.makedirs(save_folder, exist_ok=True)
-                        cv2.imwrite(os.path.join(save_folder, 'left_cheek.png'), left_cheek)
-                        cv2.imwrite(os.path.join(save_folder, 'right_cheek.png'), right_cheek)
-            
-                if image is not None:
-                    if cpnt_folder[0] == 'L':
-                        image = cv2.resize(image, (512, 512))
-                        
-                        left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip = crop_and_transform_six_parts(image)
-                        
-                        name = image_name.split('.')[0]
-                        
-                        save_folder = os.path.join(lip_folder, name)
-                        os.makedirs(save_folder, exist_ok=True)
-                        cv2.imwrite(os.path.join(save_folder, 'left_lip.png'), left_lip)
-                        cv2.imwrite(os.path.join(save_folder, 'right_lip.png'), right_lip)
-                del image
-                gc.collect()
-                        
-    input_folder = '/mnt/2E287FDD287FA28F/teamAI/hong/DATA4SOFM/DATA4VAL/LABEL1'
-    output_folder = '/mnt/2E287FDD287FA28F/teamAI/MinhQuan/siamesenn/Symetry-of-Facial-Makeup/ProtoZenon123-Symmetry-of-Facial-Make-up/DATA_ALL/data/val_data'
-    output_folder_lb1 = os.path.join(output_folder, 'label_1')
-
-    eye_folder = os.path.join(output_folder_lb1, 'eye')
-    cheek_folder = os.path.join(output_folder_lb1, 'cheek')
-    lip_folder = os.path.join(output_folder_lb1, 'lip')
-    
-    os.makedirs(eye_folder, exist_ok=True)
-    os.makedirs(cheek_folder, exist_ok=True)
-    os.makedirs(lip_folder, exist_ok=True)
-    
-    for cpnt_folder in os.listdir(input_folder):
-        cpnt_folder_dir = os.path.join(input_folder, cpnt_folder)
-        for sub_folder in os.listdir(cpnt_folder_dir):
-            sub_folder_dir = os.path.join(cpnt_folder_dir, sub_folder)
-            for image_name in tqdm(os.listdir(sub_folder_dir), desc="crop for val_data lb1", leave=False):
-                image_path = os.path.join(sub_folder_dir, image_name)
-                image = cv2.imread(image_path)
-                if image is not None:
-                    if cpnt_folder[0] == 'E':
-                        image = cv2.resize(image, (512, 512))
-                        
-                        left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip = crop_and_transform_six_parts(image)
-                        
-                        name = image_name.split('.')[0]
-                        
-                        save_folder = os.path.join(eye_folder, name)
-                        os.makedirs(save_folder, exist_ok=True)
-                        cv2.imwrite(os.path.join(save_folder, 'left_eye.png'), left_eye)
-                        cv2.imwrite(os.path.join(save_folder, 'right_eye.png'), right_eye)
-                    
-                if image is not None:
-                    if cpnt_folder[0] == 'C':
-                        image = cv2.resize(image, (512, 512))
-                        
-                        left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip = crop_and_transform_six_parts(image)
-                        
-                        name = image_name.split('.')[0]
-                        
-                        save_folder = os.path.join(cheek_folder, name)
-                        os.makedirs(save_folder, exist_ok=True)
-                        cv2.imwrite(os.path.join(save_folder, 'left_cheek.png'), left_cheek)
-                        cv2.imwrite(os.path.join(save_folder, 'right_cheek.png'), right_cheek)
-            
-                if image is not None:
-                    if cpnt_folder[0] == 'L':
-                        image = cv2.resize(image, (512, 512))
-                        
-                        left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip = crop_and_transform_six_parts(image)
-                        
-                        name = image_name.split('.')[0]
-                        
-                        save_folder = os.path.join(lip_folder, name)
-                        os.makedirs(save_folder, exist_ok=True)
-                        cv2.imwrite(os.path.join(save_folder, 'left_lip.png'), left_lip)
-                        cv2.imwrite(os.path.join(save_folder, 'right_lip.png'), right_lip)
-                del image
-                gc.collect()
-    
-    # input_folder = '/mnt/2E287FDD287FA28F/teamAI/hong/DATA4SOFM/DATA4TEST/LABEL1'
-    # output_folder = '/mnt/2E287FDD287FA28F/teamAI/MinhQuan/siamesenn/Symetry-of-Facial-Makeup/ProtoZenon123-Symmetry-of-Facial-Make-up/DATA_ALL/data/test_data'
+    # input_folder = '/mnt/2E287FDD287FA28F/teamAI/hong/DATA4SOFM/DATA_2109/LABEL1'
+    # output_folder = '/mnt/2E287FDD287FA28F/teamAI/MinhQuan/siamesenn/Symetry-of-Facial-Makeup/ProtoZenon123-Symmetry-of-Facial-Make-up/DATA_ALL/data/train_data'
     # output_folder_lb1 = os.path.join(output_folder, 'label_1')
 
     # eye_folder = os.path.join(output_folder_lb1, 'eye')
@@ -537,7 +480,7 @@ if __name__ == '__main__':
     #     cpnt_folder_dir = os.path.join(input_folder, cpnt_folder)
     #     for sub_folder in os.listdir(cpnt_folder_dir):
     #         sub_folder_dir = os.path.join(cpnt_folder_dir, sub_folder)
-    #         for image_name in tqdm(os.listdir(sub_folder_dir), desc="crop for test_data_lb1", leave=False):
+    #         for image_name in tqdm(os.listdir(sub_folder_dir), desc="crop for train_data lb1", leave=False):
     #             image_path = os.path.join(sub_folder_dir, image_name)
     #             image = cv2.imread(image_path)
     #             if image is not None:
@@ -580,111 +523,27 @@ if __name__ == '__main__':
     #                     cv2.imwrite(os.path.join(save_folder, 'right_lip.png'), right_lip)
     #             del image
     #             gc.collect()
+    input_dirs = ['/mnt/2E287FDD287FA28F/teamAI/hong/DATA4SOFM/DATA_DOWNSIZE/val']    
+    output_dirs = ['/mnt/2E287FDD287FA28F/teamAI/MinhQuan/siamesenn/Symetry-of-Facial-Makeup/SoFM/DATA_ALL/data4train/data_small/val_data']
+    
+    for idx, input_dir in enumerate(input_dirs):
+        output_dir = output_dirs[idx]
+        for label in os.listdir(input_dir):
+            if label == 'LABEL_0':
+                print(input_dir)
+                print(label)
+                os.makedirs(os.path.join(output_dir, 'label_0'), exist_ok=True)
+                inp_dir = os.path.join(input_dir, label)
+                out_dir = os.path.join(output_dir, 'label_0')
+                process_lb(inp_dir, out_dir)
+            else:
+                print(input_dir)
+                print(label)
+                os.makedirs(os.path.join(output_dir, 'label_1'), exist_ok=True)
+                inp_dir = os.path.join(input_dir, label)
+                out_dir = os.path.join(output_dir, 'label_1')
+                process_lb(inp_dir, out_dir)
                 
-    # output_folder = '/mnt/2E287FDD287FA28F/teamAI/MinhQuan/siamesenn/Symetry-of-Facial-Makeup/ProtoZenon123-Symmetry-of-Facial-Make-up/DATA_ALL/data/train_data'
-    # input_folder = '/mnt/2E287FDD287FA28F/teamAI/hong/DATA4SOFM/GANFORMER'
-    # output_folder_lb1 = os.path.join(output_folder, 'label_1')
-
-    # eye_folder = os.path.join(output_folder_lb1, 'eye')
-    # cheek_folder = os.path.join(output_folder_lb1, 'cheek')
-    # lip_folder = os.path.join(output_folder_lb1, 'lip')
-    
-    # os.makedirs(eye_folder, exist_ok=True)
-    # os.makedirs(cheek_folder, exist_ok=True)
-    # os.makedirs(lip_folder, exist_ok=True)
-    # for image_name in tqdm(os.listdir(input_folder), desc="crop for train_data lb1 non-make", leave=False):
-    #     image_path = os.path.join(input_folder, image_name)
-    #     image = cv2.imread(image_path)
-    #     if image is not None:
-    #         image = cv2.resize(image, (512, 512))
-            
-    #         left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip = crop_and_transform_six_parts(image)
-            
-    #         name = image_name.split('.')[0]
-            
-    #         save_folder = os.path.join(eye_folder, name)
-    #         os.makedirs(save_folder, exist_ok=True)
-    #         cv2.imwrite(os.path.join(save_folder, 'left_eye.png'), left_eye)
-    #         cv2.imwrite(os.path.join(save_folder, 'right_eye.png'), right_eye)
-    #         save_folder = os.path.join(cheek_folder, name)
-    #         os.makedirs(save_folder, exist_ok=True)
-    #         cv2.imwrite(os.path.join(save_folder, 'left_cheek.png'), left_cheek)
-    #         cv2.imwrite(os.path.join(save_folder, 'right_cheek.png'), right_cheek)
-    #         save_folder = os.path.join(lip_folder, name)
-    #         os.makedirs(save_folder, exist_ok=True)
-    #         cv2.imwrite(os.path.join(save_folder, 'left_lip.png'), left_lip)
-    #         cv2.imwrite(os.path.join(save_folder, 'right_lip.png'), right_lip)
-    #     del image
-    #     gc.collect()    
-                    
-    # output_folder = '/mnt/2E287FDD287FA28F/teamAI/MinhQuan/siamesenn/Symetry-of-Facial-Makeup/ProtoZenon123-Symmetry-of-Facial-Make-up/DATA_ALL/data/val_data'
-    # input_folder = '/mnt/2E287FDD287FA28F/teamAI/hong/DATA4SOFM/GANFORMER4VAL'
-    # output_folder_lb1 = os.path.join(output_folder, 'label_1')
-
-    # eye_folder = os.path.join(output_folder_lb1, 'eye')
-    # cheek_folder = os.path.join(output_folder_lb1, 'cheek')
-    # lip_folder = os.path.join(output_folder_lb1, 'lip')
-    
-    # os.makedirs(eye_folder, exist_ok=True)
-    # os.makedirs(cheek_folder, exist_ok=True)
-    # os.makedirs(lip_folder, exist_ok=True)
-    # for image_name in tqdm(os.listdir(input_folder), desc="crop for val_data lb1 non-make", leave=False):
-    #     image_path = os.path.join(input_folder, image_name)
-    #     image = cv2.imread(image_path)
-    #     if image is not None:
-    #         image = cv2.resize(image, (512, 512))
-            
-    #         left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip = crop_and_transform_six_parts(image)
-            
-    #         name = image_name.split('.')[0]
-            
-    #         save_folder = os.path.join(eye_folder, name)
-    #         os.makedirs(save_folder, exist_ok=True)
-    #         cv2.imwrite(os.path.join(save_folder, 'left_eye.png'), left_eye)
-    #         cv2.imwrite(os.path.join(save_folder, 'right_eye.png'), right_eye)
-    #         save_folder = os.path.join(cheek_folder, name)
-    #         os.makedirs(save_folder, exist_ok=True)
-    #         cv2.imwrite(os.path.join(save_folder, 'left_cheek.png'), left_cheek)
-    #         cv2.imwrite(os.path.join(save_folder, 'right_cheek.png'), right_cheek)
-    #         save_folder = os.path.join(lip_folder, name)
-    #         os.makedirs(save_folder, exist_ok=True)
-    #         cv2.imwrite(os.path.join(save_folder, 'left_lip.png'), left_lip)
-    #         cv2.imwrite(os.path.join(save_folder, 'right_lip.png'), right_lip)
-    #     del image
-    #     gc.collect()
-        
-    # output_folder = '/mnt/2E287FDD287FA28F/teamAI/MinhQuan/siamesenn/Symetry-of-Facial-Makeup/ProtoZenon123-Symmetry-of-Facial-Make-up/DATA_ALL/data/test_data'
-    # input_folder = '/mnt/2E287FDD287FA28F/teamAI/hong/DATA4SOFM/GANFORMER4TEST'
-    # output_folder_lb1 = os.path.join(output_folder, 'label_1')
-
-    # eye_folder = os.path.join(output_folder_lb1, 'eye')
-    # cheek_folder = os.path.join(output_folder_lb1, 'cheek')
-    # lip_folder = os.path.join(output_folder_lb1, 'lip')
-    
-    # os.makedirs(eye_folder, exist_ok=True)
-    # os.makedirs(cheek_folder, exist_ok=True)
-    # os.makedirs(lip_folder, exist_ok=True)
-    # for image_name in tqdm(os.listdir(input_folder), desc="crop for test_data lb1 non-make", leave=False):
-    #     image_path = os.path.join(input_folder, image_name)
-    #     image = cv2.imread(image_path)
-    #     if image is not None:
-    #         image = cv2.resize(image, (512, 512))
-            
-    #         left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip = crop_and_transform_six_parts(image)
-            
-    #         name = image_name.split('.')[0]
-            
-    #         save_folder = os.path.join(eye_folder, name)
-    #         os.makedirs(save_folder, exist_ok=True)
-    #         cv2.imwrite(os.path.join(save_folder, 'left_eye.png'), left_eye)
-    #         cv2.imwrite(os.path.join(save_folder, 'right_eye.png'), right_eye)
-    #         save_folder = os.path.join(cheek_folder, name)
-    #         os.makedirs(save_folder, exist_ok=True)
-    #         cv2.imwrite(os.path.join(save_folder, 'left_cheek.png'), left_cheek)
-    #         cv2.imwrite(os.path.join(save_folder, 'right_cheek.png'), right_cheek)
-    #         save_folder = os.path.join(lip_folder, name)
-    #         os.makedirs(save_folder, exist_ok=True)
-    #         cv2.imwrite(os.path.join(save_folder, 'left_lip.png'), left_lip)
-    #         cv2.imwrite(os.path.join(save_folder, 'right_lip.png'), right_lip)
-    #     del image
-    #     gc.collect()
+                
+       
+   
