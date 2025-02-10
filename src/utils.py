@@ -41,13 +41,6 @@ def load_config():
     }
     return config_dict
 
-def white_cheek(image):
-    # print(image.shape)
-    white_image = deepcopy(image)
-    mask = (white_image == [0, 0, 0]).all(axis=2)
-    white_image[mask] = [1, 1, 1]
-    return white_image
-
 def create_image_grid(left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip, title, scores):
     font = ImageFont.load_default()
 

@@ -20,6 +20,9 @@ from loss import contrastive_loss
 from final_crop_and_transform import crop_and_transform_six_parts
 
 def convert_to_pilimage(opencv_image):
+    '''
+    Ảnh được cắt đọc bởi CV2, trước khi đưa vào model cần đọc bằng pil
+    '''
     pilimage = cv2.cvtColor(opencv_image, cv2.COLOR_BGR2RGB)
     return Image.fromarray(pilimage)
 
