@@ -6,7 +6,6 @@ import numpy as np
 from utils import load_config
 import math, copy
 from tqdm import tqdm
-import gc
 
 hog_face_detector = dlib.get_frontal_face_detector()
 dlib_facelandmark = dlib.shape_predictor("./shape_predictor_68_face_landmarks.dat")
@@ -14,10 +13,24 @@ dlib_facelandmark = dlib.shape_predictor("./shape_predictor_68_face_landmarks.da
 output_folder_image_test = '/media/nguyenminhquan/fshit/SymmetricalMakeup/test'
 
 def mean_(list_):
+    '''
+        Tính giá trị trung bình các giá trị trong list
+        (list_ chứa các số nguyên)
+    '''
     return int(statistics.mean(list_))
 def calc_area(bbox):
+    '''
+        Tính diện tích bbox
+    '''
     return (bbox[2] - bbox[0]) * (bbox[3] - bbox[1])
+
+# 
 def rotate_image_with_landmarks(image, hor_, ver_, idx_point_1, idx_point_2, degree = 0):
+    '''
+        Xoay ảnh theo đường thẳng nối bởi 2 điểm point_1 và point_2
+        sao cho đường thẳng đấy tạo với trục hoành 0 độ.
+        idx_point_1, idx_point_2 là chỉ số của hai điểm trong list điểm 
+    '''
     image_cp = copy.deepcopy(image)
     hor_cp = copy.deepcopy(hor_)
     ver_cp = copy.deepcopy(ver_)
@@ -75,7 +88,8 @@ def draw3(image, key_points):
 #####################################################
 def left_eye_bounding_box(hor_, ver_):
     '''
-        detect bouding box of left eye
+        detect bounding box of left eye
+        trả về bbox của mắt trái: hai điểm trái trên và phải dưới
     '''
     top_left_corner_x = hor_[17]
     top_left_corner_y = mean_([ver_[19], ver_[24]])
@@ -86,6 +100,7 @@ def left_eye_bounding_box(hor_, ver_):
 def right_eye_bounding_box(hor_, ver_):
     '''
         detect bounding box of right eye
+        Trả về bbox của mắt phải: hai điểm trái trên và phải dưới
     '''
     top_left_corner_x = mean_([hor_[22], hor_[35]])
     top_left_corner_y = mean_([ver_[19], ver_[24]])
@@ -96,6 +111,8 @@ def right_eye_bounding_box(hor_, ver_):
 def crop_left_cheek(image, hor_, ver_):
     '''
         detect left cheek
+        trả về má trái, các điểm xác định vùng cắt và bbox chứa má trái
+        bbox má trái để so sánh diện tích hai má xem sẽ transform từ má bên nào sang bên còn lại
     '''
     image_ = image.copy()
     polygon_points = []
@@ -125,6 +142,8 @@ def crop_left_cheek(image, hor_, ver_):
 def crop_right_cheek(image, hor_, ver_):
     '''
         detect right cheek
+        trả về má phải, các điểm xác định vùng cắt và bbox chứa má phải
+        bbox má phải để so sánh diện tích hai má xem sẽ transform từ má bên nào sang bên còn lại
     '''
     image_ = image.copy()
     polygon_points = []
@@ -154,6 +173,7 @@ def crop_right_cheek(image, hor_, ver_):
 def left_lip_bounding_box(hor_, ver_):
     '''
         detect bounding box of left lip
+        trả về bbox môi trái: hai điểm trái trên và phải dứoi
     '''
     top_left_corner_x = mean_([hor_[48], hor_[36]])
     top_left_corner_y = ver_[33]
@@ -164,6 +184,7 @@ def left_lip_bounding_box(hor_, ver_):
 def right_lip_bounding_box(hor_, ver_):
     '''
         detect bounding box of right lip
+        trả về bbox của môi phải: hai điểm trái trên và phải dứoi
     '''
     top_left_corner_x = mean_([hor_[51], hor_[62], hor_[66], hor_[57]])
     top_left_corner_y = ver_[33]
@@ -176,6 +197,12 @@ def right_lip_bounding_box(hor_, ver_):
 #####################################################
 
 def transform_image(resource_image, dest_image, key_points_of_src, key_points_of_dest, source_bbox, is_cheek, source_image):
+    '''
+        transforms phần ảnh ở resource theo ảnh dest, source_image không cần thiết cho hàm này
+        đầu vào bao gồm ảnh resource để cung cấp nội dung ảnh cho ảnh transform, ảnh đích dest
+        keypoint của ảnh source và ảnh đích để tính ma trận
+        is_cheek để xác định xem có đang transform cho má hay không vì phần xử lý cho má hơi khác một chút
+    '''
     key_points_of_src = np.array(key_points_of_src, dtype=np.float32)
     key_points_of_dest = np.array(key_points_of_dest, dtype=np.float32)
     
@@ -188,7 +215,11 @@ def transform_image(resource_image, dest_image, key_points_of_src, key_points_of
     dest_image = cv2.flip(dest_image, 1)
     for point in key_points_of_dest_cp:
         point[0] = w - point[0] - 1
+    # Toàn bộ đoạn code trên để xác định lại list các keypoints của ảnh source và dest
+    # theo đúng thứ tự để thực hiện transform
         
+    # Tính ma trận transform và ma trận nghịch đảo
+    # trên mỗi pixel của ảnh transform xác định vị trí pixel tương ứng trên ảnh resource để fill vào
     trans_matrix, _ = cv2.estimateAffinePartial2D(key_points_of_src_cp, key_points_of_dest_cp)
     transformed_source_image = np.zeros_like(dest_image)
     trans_matrix_inv = cv2.invertAffineTransform(trans_matrix)
@@ -205,54 +236,19 @@ def transform_image(resource_image, dest_image, key_points_of_src, key_points_of
                     transformed_source_image[row, col] = resource_image[original_y, original_x]
     return transformed_source_image
 
-def transform_image_2(resource_image, dest_image, key_points_of_src, key_points_of_dest, source_bbox, is_cheek, source_image):
-    key_points_of_src = np.array(key_points_of_src, dtype=np.float32)
-    key_points_of_dest = np.array(key_points_of_dest, dtype=np.float32)
-    
-    key_points_of_src_cp = copy.deepcopy(key_points_of_src)
-    key_points_of_dest_cp = copy.deepcopy(key_points_of_dest)
-    
-    h, w, _ = dest_image.shape
-    h_src, w_src, _ = source_image.shape
-    lim_h, lim_w, _ = resource_image.shape
-    
-    dest_image = cv2.flip(dest_image, 1)
-    for point in key_points_of_dest_cp:
-        point[0] = w - point[0] - 1
-    
-    src_img = copy.deepcopy(source_image)
-    trans_matrix, _ = cv2.estimateAffinePartial2D(key_points_of_src_cp, key_points_of_dest_cp)
-
-    transformed_source_image = cv2.warpAffine(src_img, trans_matrix, (w, h))
-    trans_matrix_inv = cv2.invertAffineTransform(trans_matrix)
-    x_min, y_min, x_max, y_max = source_bbox
-    # for row in range(h):
-    #     for col in range(w):
-    #         if not is_cheek or (is_cheek and not np.array_equal(dest_image[row, col], [0, 0, 0])):
-    #             transformed_pixel = np.dot(trans_matrix_inv, np.array([col, row, 1]))
-
-    #             original_x = int(transformed_pixel[0]) + x_min
-    #             original_y = int(transformed_pixel[1]) + y_min
-                
-    #             if x_min <= original_x < x_max and y_min <= original_y < y_max:
-    #                 transformed_source_image[row, col] = resource_image[original_y, original_x]
-    # ones_column = np.ones((key_points_of_src_resize.shape[0], 1))
-    # key_points_with_ones = np.hstack([key_points_of_src_resize, ones_column])
-
-    # transformed_keypoints = np.dot(trans_matrix, key_points_with_ones.T).T
-        
-    # transformed_source_image_cp = draw2(transformed_source_image, transformed_keypoints)
-    # print(transformed_keypoints)
-    # cv2.imwrite(os.path.join(toi_khong_sai_folder, 'trans_image_kp.png'), transformed_source_image_cp)
-    return transformed_source_image
-
 def crop_and_transform_six_parts(image):
     '''
     crop a face image to 6 parts: left eye, right eye, left cheek,
                                   right cheek, left lip, right lip
+    hai phần bao gồm:
+        -Xác định các phần trên khuôn mặt.
+        -Sau khi xác định mới thực hiện transform từ ảnh
+         có kích thước lớn hơn về ảnh có kích thước nhỏ hơn
     '''
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     faces = hog_face_detector(gray)
+    if len(faces) == 0:
+        return None, None, None, None, None, None
     face4cr = faces[0]
     face_landmarks = dlib_facelandmark(gray, face4cr)
 
@@ -262,13 +258,17 @@ def crop_and_transform_six_parts(image):
         hor_.append(face_landmarks.part(n).x)
         ver_.append(face_landmarks.part(n).y)
     
-    #-------------------------#
-    #----- crop left eye -----#
-    #-------------------------#
+    ##################################################################################################
+    ##############                   Xác định và cắt các bộ phận                  ####################
+    ##################################################################################################
+
+    
+    #--------------------------------------------------------------------------------------------#
+    #------------------------------------ crop left eye -----------------------------------------#
+    #--------------------------------------------------------------------------------------------#
     
     # rotate image and landmarks depend on left eye
     rotated_left_eye_image, hor_cp, ver_cp = rotate_image_with_landmarks(image, hor_, ver_, 36, 39, 0)
-     
     x_min, y_min, x_max, y_max = left_eye_bounding_box(hor_cp, ver_cp)
     left_eye_bbox = [x_min, y_min, x_max, y_max]
     
@@ -282,13 +282,12 @@ def crop_and_transform_six_parts(image):
         point[0] -= x_min
         point[1] -= y_min
     
-    #--------------------------#
-    #----- crop right eye -----#
-    #--------------------------#
+    #-------------------------------------------------------------------------------------------------#
+    #---------------------------------------- crop right eye -----------------------------------------#
+    #-------------------------------------------------------------------------------------------------#
     
     # rotate image and landmarks depend on right eye
     rotated_right_eye_image, hor_cp, ver_cp = rotate_image_with_landmarks(image, hor_, ver_, 42, 45, 0)
-    
     x_min, y_min, x_max, y_max = right_eye_bounding_box(hor_cp, ver_cp)
     right_eye_bbox = [x_min, y_min, x_max, y_max]
     
@@ -302,13 +301,12 @@ def crop_and_transform_six_parts(image):
         point[0] -= x_min
         point[1] -= y_min   
     
-    #------------------------------#
-    #----- crop lip and cheek -----#
-    #------------------------------#
+    #-----------------------------------------------------------------------------------------------------------#
+    #-------------------------------------------- crop lip and cheek -------------------------------------------#
+    #-----------------------------------------------------------------------------------------------------------#
     
     # rotate image and landmarks depend on the lips
     rotated_lip_image, hor_cp, ver_cp = rotate_image_with_landmarks(image, hor_, ver_, 51, 57, 90)
-    
     x_min, y_min, x_max, y_max = left_lip_bounding_box(hor_cp, ver_cp)
     left_lip_bbox = [x_min, y_min, x_max, y_max]
     
@@ -349,9 +347,12 @@ def crop_and_transform_six_parts(image):
         point[0] -= x_min
         point[1] -= y_min
         
-    #--------------------------------#
-    #----- Transforms each part -----#
-    #--------------------------------#
+    #-----------------------------------------------------------------------------------------------------#
+    #-------------------------------------- Transforms each part -----------------------------------------#
+    #-----------------------------------------------------------------------------------------------------#
+    '''
+        Tính diện tích các phần dựa trên bbox kể cả má để xác định ảnh nào là ảnh được transform
+    '''
     
     # transform eye
     if calc_area(left_eye_bbox) > calc_area(right_eye_bbox):
@@ -374,175 +375,63 @@ def crop_and_transform_six_parts(image):
     return left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip
 
 def process_lb(inp_dir, out_dir):
-    for component in os.listdir(inp_dir):            
-        for sub_folder in os.listdir(os.path.join(inp_dir, component)):
-            for image_name in tqdm(os.listdir(os.path.join(inp_dir, component, sub_folder)), desc=f"{sub_folder} of {component} in {inp_dir}"):
-                image_path = os.path.join(inp_dir, component, sub_folder, image_name)
-                image = cv2.imread(image_path)
-                
-                if image is not None:
-                    image = cv2.resize(image, (512, 512))
-                    left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip = crop_and_transform_six_parts(image)
-                    name = image_name.split('.')[0]
-
-                    if component[0] == 'E':
-                        save_dir = os.path.join(out_dir, 'eye', name)
-                        os.makedirs(save_dir, exist_ok=True)
-                        cv2.imwrite(os.path.join(save_dir, 'left_eye.png'), left_eye)
-                        cv2.imwrite(os.path.join(save_dir, 'right_eye.png'), right_eye)
-                    elif component[0] == 'L':
-                        save_dir = os.path.join(out_dir, 'lip', name)
-                        os.makedirs(save_dir, exist_ok=True)
-                        cv2.imwrite(os.path.join(save_dir, 'left_lip.png'), left_lip)
-                        cv2.imwrite(os.path.join(save_dir, 'right_lip.png'), right_lip)
-                    elif component[0] == 'C':
-                        save_dir = os.path.join(out_dir, 'cheek', name)
-                        os.makedirs(save_dir, exist_ok=True)
-                        cv2.imwrite(os.path.join(save_dir, 'left_cheek.png'), left_cheek)
-                        cv2.imwrite(os.path.join(save_dir, 'right_cheek.png'), right_cheek)
-                    else:
-                        save_dir = out_dir
-                        save_dir = os.path.join(out_dir, 'eye', name)
-                        os.makedirs(save_dir, exist_ok=True)
-                        cv2.imwrite(os.path.join(save_dir, 'left_eye.png'), left_eye)
-                        cv2.imwrite(os.path.join(save_dir, 'right_eye.png'), right_eye)
-                        save_dir = os.path.join(out_dir, 'lip', name)
-                        os.makedirs(save_dir, exist_ok=True)
-                        cv2.imwrite(os.path.join(save_dir, 'left_lip.png'), left_lip)
-                        cv2.imwrite(os.path.join(save_dir, 'right_lip.png'), right_lip)
-                        save_dir = os.path.join(out_dir, 'cheek', name)
-                        os.makedirs(save_dir, exist_ok=True)
-                        cv2.imwrite(os.path.join(save_dir, 'left_cheek.png'), left_cheek)
-                        cv2.imwrite(os.path.join(save_dir, 'right_cheek.png'), right_cheek)
+    '''
+    Hàm này để thực hiện cắt ảnh từ các ảnh có trong inp_dir vào out_dir
+    Hàm này không cố định các duyệt tree folder, tự linh động sửa
+    '''
+    for lb in os.listdir(inp_dir):
+        lb_folder = os.path.join(inp_dir, lb)
+        for cpnt in os.listdir(lb_folder):
+            cpnt_folder = os.path.join(lb_folder, cpnt)
+            for sub in os.listdir(cpnt_folder):
+                subfolder = os.path.join(cpnt_folder, sub)
+                for image_name in tqdm(os.listdir(subfolder),desc=f'{subfolder}'):
+                    image_path = os.path.join(subfolder, image_name)
+                    image = cv2.imread(image_path)
+                    if image is not None:
+                        image = cv2.resize(image, (512, 512))
+                        left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip = crop_and_transform_six_parts(image)
+                        name = image_name.split('.')[0]
                         
-# def process_lb0(inp_dir, out_dir):
-#     for component in os.listdir(inp_dir):            
-#         for sub_folder in os.listdir(os.path.join(inp_dir, component)):
-#             for image_name in os.listdir(os.path.join(inp_dir, component, sub_folder)):
-#                 image_path = os.path.join(inp_dir, component, sub_folder, image_name)
-#                 image = cv2.imread(image_path)
-                
-#                 if image is not None:
-#                     image = cv2.resize(image, (512, 512))
-#                     left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip = crop_and_transform_six_parts(image)
-#                     name = image_name.split('.')[0]
-
-#                     if component[0] == 'E':
-#                         save_dir = os.path.join(out_dir, 'eye', name)
-#                         os.makedirs(save_dir, exist_ok=True)
-#                         cv2.imwrite(os.path.join(save_dir, 'left_eye.png'), left_eye)
-#                         cv2.imwrite(os.path.join(save_dir, 'right_eye.png'), right_eye)
-#                     elif component[0] == 'L':
-#                         save_dir = os.path.join(out_dir, 'lip', name)
-#                         os.makedirs(save_dir, exist_ok=True)
-#                         cv2.imwrite(os.path.join(save_dir, 'left_lip.png'), left_lip)
-#                         cv2.imwrite(os.path.join(save_dir, 'right_lip.png'), right_lip)
-#                     elif component[0] == 'C':
-#                         save_dir = os.path.join(out_dir, 'cheek', name)
-#                         os.makedirs(save_dir, exist_ok=True)
-#                         cv2.imwrite(os.path.join(save_dir, 'left_cheek.png'), left_cheek)
-#                         cv2.imwrite(os.path.join(save_dir, 'right_cheek.png'), right_cheek)
-#                     else:
-#                         save_dir = out_dir
-#                         save_dir = os.path.join(out_dir, 'eye', name)
-#                         os.makedirs(save_dir, exist_ok=True)
-#                         cv2.imwrite(os.path.join(save_dir, 'left_eye.png'), left_eye)
-#                         cv2.imwrite(os.path.join(save_dir, 'right_eye.png'), right_eye)
-#                         save_dir = os.path.join(out_dir, 'lip', name)
-#                         os.makedirs(save_dir, exist_ok=True)
-#                         cv2.imwrite(os.path.join(save_dir, 'left_lip.png'), left_lip)
-#                         cv2.imwrite(os.path.join(save_dir, 'right_lip.png'), right_lip)
-#                         save_dir = os.path.join(out_dir, 'cheek', name)
-#                         os.makedirs(save_dir, exist_ok=True)
-#                         cv2.imwrite(os.path.join(save_dir, 'left_cheek.png'), left_cheek)
-#                         cv2.imwrite(os.path.join(save_dir, 'right_cheek.png'), right_cheek)              
+                        out_folder = out_dir
+                        if lb == 'lb0':
+                            out_folder = os.path.join(out_folder, 'label_0')
+                        else:
+                            out_folder = os.path.join(out_folder, 'label_1')
+                        out_folder_eye = out_folder
+                        out_folder_cheek = out_folder
+                        out_folder_lip = out_folder
+                        if left_eye is not None and right_eye is not None:
+                            if cpnt[0] == 'e' or cpnt[0] == 'n':
+                                out_folder_eye = os.path.join(out_folder_eye, 'eye', name)
+                                os.makedirs(out_folder_eye, exist_ok=True)
+                                cv2.imwrite(os.path.join(out_folder_eye, 'left_eye.png'), left_eye)
+                                cv2.imwrite(os.path.join(out_folder_eye, 'right_eye.png'), right_eye)
+                        if left_cheek is not None and right_cheek is not None:
+                            if cpnt[0] == 's' or cpnt[0] == 'c' or cpnt[0] == 'n':
+                                out_folder_cheek = os.path.join(out_folder_cheek, 'cheek', name)
+                                os.makedirs(out_folder, exist_ok=True)
+                                cv2.imwrite(os.path.join(out_folder_cheek, 'left_cheek.png'), left_cheek)
+                                cv2.imwrite(os.path.join(out_folder_cheek, 'right_cheek.png'), right_cheek)
+                        if left_lip is not None and right_lip is not None:
+                            if cpnt[-1] == 'p' or cpnt[0] == 'n':
+                                out_folder_lip = os.path.join(out_folder_lip, 'lip', name)
+                                os.makedirs(out_folder, exist_ok=True)
+                                cv2.imwrite(os.path.join(out_folder_lip, 'left_lip.png'), left_lip)
+                                cv2.imwrite(os.path.join(out_folder_lip, 'right_lip.png'), right_lip)     
                     
-            
 if __name__ == '__main__':
     
     #-------------------------------------------------------------------------------------------------------
     #------------------------------------------- LABEL 1 ---------------------------------------------------
     #-------------------------------------------------------------------------------------------------------
     
-    # input_folder = '/mnt/2E287FDD287FA28F/teamAI/hong/DATA4SOFM/DATA_2109/LABEL1'
-    # output_folder = '/mnt/2E287FDD287FA28F/teamAI/MinhQuan/siamesenn/Symetry-of-Facial-Makeup/ProtoZenon123-Symmetry-of-Facial-Make-up/DATA_ALL/data/train_data'
-    # output_folder_lb1 = os.path.join(output_folder, 'label_1')
-
-    # eye_folder = os.path.join(output_folder_lb1, 'eye')
-    # cheek_folder = os.path.join(output_folder_lb1, 'cheek')
-    # lip_folder = os.path.join(output_folder_lb1, 'lip')
-    
-    # os.makedirs(eye_folder, exist_ok=True)
-    # os.makedirs(cheek_folder, exist_ok=True)
-    # os.makedirs(lip_folder, exist_ok=True)
-    
-    # for cpnt_folder in os.listdir(input_folder):
-    #     cpnt_folder_dir = os.path.join(input_folder, cpnt_folder)
-    #     for sub_folder in os.listdir(cpnt_folder_dir):
-    #         sub_folder_dir = os.path.join(cpnt_folder_dir, sub_folder)
-    #         for image_name in tqdm(os.listdir(sub_folder_dir), desc="crop for train_data lb1", leave=False):
-    #             image_path = os.path.join(sub_folder_dir, image_name)
-    #             image = cv2.imread(image_path)
-    #             if image is not None:
-    #                 if cpnt_folder[0] == 'E':
-    #                     image = cv2.resize(image, (512, 512))
-                        
-    #                     left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip = crop_and_transform_six_parts(image)
-                        
-    #                     name = image_name.split('.')[0]
-                        
-    #                     save_folder = os.path.join(eye_folder, name)
-    #                     os.makedirs(save_folder, exist_ok=True)
-    #                     cv2.imwrite(os.path.join(save_folder, 'left_eye.png'), left_eye)
-    #                     cv2.imwrite(os.path.join(save_folder, 'right_eye.png'), right_eye)
-                    
-    #             if image is not None:
-    #                 if cpnt_folder[0] == 'C':
-    #                     image = cv2.resize(image, (512, 512))
-                        
-    #                     left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip = crop_and_transform_six_parts(image)
-                        
-    #                     name = image_name.split('.')[0]
-                        
-    #                     save_folder = os.path.join(cheek_folder, name)
-    #                     os.makedirs(save_folder, exist_ok=True)
-    #                     cv2.imwrite(os.path.join(save_folder, 'left_cheek.png'), left_cheek)
-    #                     cv2.imwrite(os.path.join(save_folder, 'right_cheek.png'), right_cheek)
-            
-    #             if image is not None:
-    #                 if cpnt_folder[0] == 'L':
-    #                     image = cv2.resize(image, (512, 512))
-                        
-    #                     left_eye, right_eye, left_cheek, right_cheek, left_lip, right_lip = crop_and_transform_six_parts(image)
-                        
-    #                     name = image_name.split('.')[0]
-                        
-    #                     save_folder = os.path.join(lip_folder, name)
-    #                     os.makedirs(save_folder, exist_ok=True)
-    #                     cv2.imwrite(os.path.join(save_folder, 'left_lip.png'), left_lip)
-    #                     cv2.imwrite(os.path.join(save_folder, 'right_lip.png'), right_lip)
-    #             del image
-    #             gc.collect()
-    input_dirs = ['/mnt/2E287FDD287FA28F/teamAI/hong/DATA4SOFM/DATA_DOWNSIZE/val']    
-    output_dirs = ['/mnt/2E287FDD287FA28F/teamAI/MinhQuan/siamesenn/Symetry-of-Facial-Makeup/SoFM/DATA_ALL/data4train/data_small/val_data']
+    input_dirs = ['/mnt/2E287FDD287FA28F/teamAI/hong/code_MT/01_face_MT_CSD_1612/RES_1002_CSD/train']    
+    output_dirs = ['/mnt/2E287FDD287FA28F/teamAI/MinhQuan/siamesenn/Symetry-of-Facial-Makeup/SoFM/DATA_ALL/data4train/DATA_1002_CSD_EGAN__/train_data']
     
     for idx, input_dir in enumerate(input_dirs):
         output_dir = output_dirs[idx]
-        for label in os.listdir(input_dir):
-            if label == 'LABEL_0':
-                print(input_dir)
-                print(label)
-                os.makedirs(os.path.join(output_dir, 'label_0'), exist_ok=True)
-                inp_dir = os.path.join(input_dir, label)
-                out_dir = os.path.join(output_dir, 'label_0')
-                process_lb(inp_dir, out_dir)
-            else:
-                print(input_dir)
-                print(label)
-                os.makedirs(os.path.join(output_dir, 'label_1'), exist_ok=True)
-                inp_dir = os.path.join(input_dir, label)
-                out_dir = os.path.join(output_dir, 'label_1')
-                process_lb(inp_dir, out_dir)
+        process_lb(input_dir, output_dir)
                 
                 
        
