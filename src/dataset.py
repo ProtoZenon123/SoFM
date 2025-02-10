@@ -73,6 +73,5 @@ if __name__ == '__main__':
     my_dataset = SiameseNetworkDataset(image_folder_dir=image_folder_dir,
                                        transform=transform, component="lip")
     
-    # for item in my_dataset:
-    #     print(item)
     
+
