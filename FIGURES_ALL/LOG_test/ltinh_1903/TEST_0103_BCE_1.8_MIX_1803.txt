@@ -1,0 +1,27 @@
+2025-03-19 17:15:43,575 - Starting new training session
+2025-03-19 17:15:43,575 - Evaluate with two model_weights:
+2025-03-19 17:21:43,319 - Type model * type dts: ltinh_1903
+2025-03-19 17:21:43,319 - Model: 0103_BCE_1.8
+2025-03-19 17:21:43,319 - Data test: MIX
+2025-03-19 17:21:43,319 - Accuracy with last weight: 88.04%
+2025-03-19 17:21:43,319 - Loss with last weight: 0.00132507
+2025-03-19 17:22:21,210 - Accuracy with min_loss weight: 87.73%
+2025-03-19 17:22:21,211 - Loss with min_loss weight: 0.00132540
+2025-03-19 17:27:01,315 - Starting new training session
+2025-03-19 17:27:01,315 - Evaluate with two model_weights:
+2025-03-19 17:33:08,261 - Type model * type dts: ltinh_1903
+2025-03-19 17:33:08,261 - Model: 0103_BCE_1.8
+2025-03-19 17:33:08,261 - Data test: MIX
+2025-03-19 17:33:08,262 - Accuracy with last weight: 87.52%
+2025-03-19 17:33:08,262 - Loss with last weight: 0.00146933
+2025-03-19 17:33:44,857 - Accuracy with min_loss weight: 87.32%
+2025-03-19 17:33:44,857 - Loss with min_loss weight: 0.00140059
+2025-03-19 17:35:04,979 - Starting new training session
+2025-03-19 17:35:04,979 - Evaluate with two model_weights:
+2025-03-19 17:56:50,405 - Type model * type dts: ltinh_1903
+2025-03-19 17:56:50,405 - Model: 0103_BCE_1.8
+2025-03-19 17:56:50,405 - Data test: MIX
+2025-03-19 17:56:50,406 - Accuracy with last weight: 84.96%
+2025-03-19 17:56:50,406 - Loss with last weight: 0.00188711
+2025-03-19 17:58:58,636 - Accuracy with min_loss weight: 84.42%
+2025-03-19 17:58:58,636 - Loss with min_loss weight: 0.00191933

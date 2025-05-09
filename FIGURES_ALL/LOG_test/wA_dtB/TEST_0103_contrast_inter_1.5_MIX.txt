@@ -1,0 +1,10 @@
+
+2025-03-17 09:57:23,113 - Starting new training session
+2025-03-17 09:57:23,113 - Evaluate with two model_weights:
+2025-03-17 09:58:03,389 - Type model * type dts: wA_dtB
+2025-03-17 09:58:03,389 - Model: 0103_contrast_inter_1.5
+2025-03-17 09:58:03,389 - Data test: MIX
+2025-03-17 09:58:03,389 - Accuracy with last weight: 71.70%
+2025-03-17 09:58:03,389 - Loss with last weight: 0.00098169
+2025-03-17 09:58:43,951 - Accuracy with min_loss weight: 69.05%
+2025-03-17 09:58:43,951 - Loss with min_loss weight: 0.00095321

@@ -1,0 +1,9 @@
+2025-04-04 04:01:44,880 - Starting new training session
+2025-04-04 04:01:44,880 - Evaluate with two model_weights:
+2025-04-04 04:01:53,326 - Type model * type dts: test_44
+2025-04-04 04:01:53,326 - Model: MIX_BCE_None
+2025-04-04 04:01:53,326 - Data test: front
+2025-04-04 04:01:53,327 - Accuracy with last weight: 96.58%
+2025-04-04 04:01:53,327 - Loss with last weight: 0.00038825
+2025-04-04 04:01:59,585 - Accuracy with min_loss weight: 97.79%
+2025-04-04 04:01:59,585 - Loss with min_loss weight: 0.00029324

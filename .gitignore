@@ -1,5 +1,5 @@
 DATA_ALL/
-WEIGHTS_ALL/
+CHECKPOINTS_ALL/
 siamesenn_env/
 **/__pycache__/
 **/.pytest_cache/

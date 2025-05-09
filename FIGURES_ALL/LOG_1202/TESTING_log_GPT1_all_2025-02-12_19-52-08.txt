@@ -1,0 +1,7 @@
+2025-02-12 19:52:08,767 - Starting new training session
+2025-02-12 19:52:08,768 - Evaluate with two model_weights:
+2025-02-12 19:52:08,768 - < Test dataset >
+2025-02-12 20:02:15,049 - Accuracy with last weight: 94.27%
+2025-02-12 20:02:15,049 - Loss with last weight: 0.00006610
+2025-02-12 20:03:20,066 - Accuracy with min_loss weight: 96.54%
+2025-02-12 20:03:20,066 - Loss with min_loss weight: 0.00005971

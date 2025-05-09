@@ -1,0 +1,2 @@
+2025-04-04 03:57:12,776 - Starting new training session
+2025-04-04 03:57:12,776 - Evaluate with two model_weights:

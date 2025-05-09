@@ -1,0 +1,11 @@
+2025-03-18 13:01:43,381 - Starting new training session
+2025-03-18 13:01:43,382 - Evaluate with two model_weights:
+2025-03-18 13:18:20,492 - Starting new training session
+2025-03-18 13:18:20,492 - Evaluate with two model_weights:
+2025-03-18 13:18:49,104 - Type model * type dts: wA_dtEleGANt
+2025-03-18 13:18:49,104 - Model: 0103_contrast_inter_1.8
+2025-03-18 13:18:49,104 - Data test: EleGANt
+2025-03-18 13:18:49,104 - Accuracy with last weight: 67.72%
+2025-03-18 13:18:49,104 - Loss with last weight: 0.00164863
+2025-03-18 13:19:12,964 - Accuracy with min_loss weight: 67.33%
+2025-03-18 13:19:12,964 - Loss with min_loss weight: 0.00170297

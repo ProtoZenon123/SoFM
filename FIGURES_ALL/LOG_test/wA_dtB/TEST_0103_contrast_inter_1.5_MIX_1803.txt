@@ -1,0 +1,9 @@
+
+2025-03-18 12:06:04,767 - Evaluate with two model_weights:
+2025-03-18 12:06:49,926 - Type model * type dts: wA_dtB
+2025-03-18 12:06:49,926 - Model: 0103_contrast_inter_1.5
+2025-03-18 12:06:49,926 - Data test: MIX
+2025-03-18 12:06:49,926 - Accuracy with last weight: 71.70%
+2025-03-18 12:06:49,926 - Loss with last weight: 0.00097872
+2025-03-18 12:07:31,902 - Accuracy with min_loss weight: 69.05%
+2025-03-18 12:07:31,902 - Loss with min_loss weight: 0.00095070

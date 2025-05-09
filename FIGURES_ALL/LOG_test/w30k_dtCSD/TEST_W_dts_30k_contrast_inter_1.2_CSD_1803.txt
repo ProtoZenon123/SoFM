@@ -1,0 +1,11 @@
+2025-03-18 12:40:51,579 - Starting new training session
+2025-03-18 12:40:51,579 - Evaluate with two model_weights:
+2025-03-18 12:41:23,160 - Starting new training session
+2025-03-18 12:41:23,161 - Evaluate with two model_weights:
+2025-03-18 12:43:40,398 - Type model * type dts: w30k_dtCSD
+2025-03-18 12:43:40,399 - Model: W_dts_30k_contrast_inter_1.2
+2025-03-18 12:43:40,399 - Data test: CSD
+2025-03-18 12:43:40,399 - Accuracy with last weight: 65.90%
+2025-03-18 12:43:40,399 - Loss with last weight: 0.00104353
+2025-03-18 12:44:06,832 - Accuracy with min_loss weight: 65.90%
+2025-03-18 12:44:06,832 - Loss with min_loss weight: 0.00104356

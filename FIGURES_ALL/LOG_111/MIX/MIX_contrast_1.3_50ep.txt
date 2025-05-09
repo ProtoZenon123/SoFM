@@ -1,0 +1,356 @@
+2025-03-13 22:38:45,221 - Starting new training session
+2025-03-13 22:38:45,222 - INFOR:++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2025-03-13 22:38:45,222 - model_type: contrast_inter
+2025-03-13 22:38:45,222 - component: all
+2025-03-13 22:38:45,222 - INFOR:++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2025-03-13 22:38:45,222 - < Train dataset >
+2025-03-13 22:38:55,074 - < Validation dataset >
+2025-03-13 22:38:58,282 - siameseCNN_Contrast_Inter(
+  (layer): Sequential(
+    (0): Sequential(
+      (0): Conv2d(3, 64, kernel_size=(10, 10), stride=(1, 1))
+      (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU(inplace=True)
+      (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    )
+    (1): Sequential(
+      (0): Conv2d(64, 128, kernel_size=(7, 7), stride=(1, 1))
+      (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU(inplace=True)
+      (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    )
+    (2): Sequential(
+      (0): Conv2d(128, 128, kernel_size=(4, 4), stride=(1, 1))
+      (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU(inplace=True)
+      (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    )
+    (3): Conv2d(128, 256, kernel_size=(4, 4), stride=(1, 1))
+    (4): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (5): ReLU(inplace=True)
+  )
+  (fc1): Sequential(
+    (0): Linear(in_features=16384, out_features=4096, bias=True)
+    (1): ReLU(inplace=True)
+    (2): Linear(in_features=4096, out_features=128, bias=True)
+  )
+)
+2025-03-13 22:38:58,283 - HYPER PARAM:
+2025-03-13 22:38:58,283 - 	BATCH_SIZE: 256
+2025-03-13 22:38:58,283 - 	NUM_EPOCH: 50
+2025-03-13 22:38:58,283 - 	DEVICE: cuda:0
+2025-03-13 22:38:58,283 - 	CHANNELS_IMAGE: 3
+2025-03-13 22:38:58,283 - 	NUM_FEATURES: 64
+2025-03-13 22:38:58,283 - 	MARGIN: 1.3
+2025-03-13 22:38:58,283 - 	THRESHOLD: 0.5
+2025-03-13 22:38:58,283 - 	CRITERION: contrastive_loss()
+2025-03-13 22:38:58,283 - 	OPTIMIZER: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    lr: 5e-05
+    maximize: False
+    weight_decay: 0.0002
+)
+2025-03-13 22:38:58,283 - START TRAINING:
+2025-03-13 22:38:58,465 - Epoch number 0:
+2025-03-13 22:41:40,402 - train_loss = 0.001039758581250175
+2025-03-13 22:41:40,402 - val_loss =   0.0007697482641686536
+2025-03-13 22:41:40,403 - accuracy training:   63.76%
+2025-03-13 22:41:40,403 - accuracy validation: 66.89%
+2025-03-13 22:41:40,403 - 	NOTE: Get the last min_loss_weights at epoch 0
+2025-03-13 22:41:47,270 - Epoch number 1:
+2025-03-13 22:44:25,799 - train_loss = 0.0005138632174128904
+2025-03-13 22:44:25,799 - val_loss =   0.0005214750823064632
+2025-03-13 22:44:25,799 - accuracy training:   75.13%
+2025-03-13 22:44:25,799 - accuracy validation: 70.88%
+2025-03-13 22:44:25,799 - 	NOTE: Get the last min_loss_weights at epoch 1
+2025-03-13 22:44:33,045 - Epoch number 2:
+2025-03-13 22:47:12,539 - train_loss = 0.00038237018070697194
+2025-03-13 22:47:12,540 - val_loss =   0.00040854668951491465
+2025-03-13 22:47:12,540 - accuracy training:   79.12%
+2025-03-13 22:47:12,540 - accuracy validation: 74.54%
+2025-03-13 22:47:12,540 - 	NOTE: Get the last min_loss_weights at epoch 2
+2025-03-13 22:47:19,410 - Epoch number 3:
+2025-03-13 22:49:58,285 - train_loss = 0.00030458173044850073
+2025-03-13 22:49:58,285 - val_loss =   0.00034813864349039856
+2025-03-13 22:49:58,285 - accuracy training:   82.00%
+2025-03-13 22:49:58,286 - accuracy validation: 78.82%
+2025-03-13 22:49:58,286 - 	NOTE: Get the last min_loss_weights at epoch 3
+2025-03-13 22:50:05,779 - Epoch number 4:
+2025-03-13 22:52:45,654 - train_loss = 0.00025432744055636027
+2025-03-13 22:52:45,655 - val_loss =   0.00034954310583677344
+2025-03-13 22:52:45,655 - accuracy training:   84.01%
+2025-03-13 22:52:45,655 - accuracy validation: 74.92%
+2025-03-13 22:52:45,655 - 	NOTE: Get the last min_loss_weights at epoch 4
+2025-03-13 22:52:52,951 - Epoch number 5:
+2025-03-13 22:55:33,162 - train_loss = 0.00021778156046366228
+2025-03-13 22:55:33,162 - val_loss =   0.0002791406728170912
+2025-03-13 22:55:33,162 - accuracy training:   85.56%
+2025-03-13 22:55:33,162 - accuracy validation: 80.81%
+2025-03-13 22:55:33,162 - 	NOTE: Get the last min_loss_weights at epoch 5
+2025-03-13 22:55:39,581 - Epoch number 6:
+2025-03-13 22:58:18,023 - train_loss = 0.00018880532777624422
+2025-03-13 22:58:18,023 - val_loss =   0.0002910482886168339
+2025-03-13 22:58:18,023 - accuracy training:   86.93%
+2025-03-13 22:58:18,023 - accuracy validation: 80.76%
+2025-03-13 22:58:18,024 - 	NOTE: Get the last min_loss_weights at epoch 6
+2025-03-13 22:58:25,071 - Epoch number 7:
+2025-03-13 23:02:13,144 - train_loss = 0.00016545968173818326
+2025-03-13 23:02:13,144 - val_loss =   0.0002455963520066073
+2025-03-13 23:02:13,144 - accuracy training:   87.75%
+2025-03-13 23:02:13,145 - accuracy validation: 84.29%
+2025-03-13 23:02:13,145 - 	NOTE: Get the last min_loss_weights at epoch 7
+2025-03-13 23:02:20,144 - Epoch number 8:
+2025-03-13 23:05:12,407 - train_loss = 0.00014523367915883633
+2025-03-13 23:05:12,407 - val_loss =   0.00025503849607543975
+2025-03-13 23:05:12,407 - accuracy training:   88.75%
+2025-03-13 23:05:12,407 - accuracy validation: 80.69%
+2025-03-13 23:05:12,407 - 	NOTE: Get the last min_loss_weights at epoch 8
+2025-03-13 23:05:18,795 - Epoch number 9:
+2025-03-13 23:08:44,677 - train_loss = 0.00013207153508857554
+2025-03-13 23:08:44,678 - val_loss =   0.00022271909063519943
+2025-03-13 23:08:44,678 - accuracy training:   89.41%
+2025-03-13 23:08:44,678 - accuracy validation: 84.16%
+2025-03-13 23:08:44,678 - 	NOTE: Get the last min_loss_weights at epoch 9
+2025-03-13 23:08:51,140 - Epoch number 10:
+2025-03-13 23:11:33,503 - train_loss = 0.0001209810378895884
+2025-03-13 23:11:33,504 - val_loss =   0.00022670298631764495
+2025-03-13 23:11:33,504 - accuracy training:   90.07%
+2025-03-13 23:11:33,504 - accuracy validation: 85.99%
+2025-03-13 23:11:33,504 - 	NOTE: Get the last min_loss_weights at epoch 10
+2025-03-13 23:11:40,506 - Epoch number 11:
+2025-03-13 23:15:35,140 - train_loss = 0.00010802811074989221
+2025-03-13 23:15:35,140 - val_loss =   0.00022351430750776457
+2025-03-13 23:15:35,140 - accuracy training:   90.80%
+2025-03-13 23:15:35,140 - accuracy validation: 84.41%
+2025-03-13 23:15:35,140 - 	NOTE: Get the last min_loss_weights at epoch 11
+2025-03-13 23:15:41,601 - Epoch number 12:
+2025-03-13 23:18:35,213 - train_loss = 9.465051174535465e-05
+2025-03-13 23:18:35,213 - val_loss =   0.000208029371780361
+2025-03-13 23:18:35,213 - accuracy training:   91.20%
+2025-03-13 23:18:35,213 - accuracy validation: 83.41%
+2025-03-13 23:18:35,213 - 	NOTE: Get the last min_loss_weights at epoch 12
+2025-03-13 23:21:03,787 - Epoch number 13:
+2025-03-13 23:26:39,913 - train_loss = 9.059257858100117e-05
+2025-03-13 23:26:39,913 - val_loss =   0.00019291284587052003
+2025-03-13 23:26:39,913 - accuracy training:   91.66%
+2025-03-13 23:26:39,913 - accuracy validation: 86.86%
+2025-03-13 23:26:39,913 - 	NOTE: Get the last min_loss_weights at epoch 13
+2025-03-13 23:26:46,645 - Epoch number 14:
+2025-03-13 23:31:11,274 - train_loss = 8.195688463816066e-05
+2025-03-13 23:31:11,274 - val_loss =   0.0001787622885646443
+2025-03-13 23:31:11,275 - accuracy training:   92.15%
+2025-03-13 23:31:11,275 - accuracy validation: 89.15%
+2025-03-13 23:31:11,275 - 	NOTE: Get the last min_loss_weights at epoch 14
+2025-03-13 23:31:18,548 - Epoch number 15:
+2025-03-13 23:34:23,389 - train_loss = 7.632061049492717e-05
+2025-03-13 23:34:23,390 - val_loss =   0.00017301830935654382
+2025-03-13 23:34:23,390 - accuracy training:   92.50%
+2025-03-13 23:34:23,390 - accuracy validation: 87.15%
+2025-03-13 23:34:23,390 - 	NOTE: Get the last min_loss_weights at epoch 15
+2025-03-13 23:34:30,727 - Epoch number 16:
+2025-03-13 23:37:11,030 - train_loss = 7.14319874082129e-05
+2025-03-13 23:37:11,030 - val_loss =   0.00017875877393587968
+2025-03-13 23:37:11,030 - accuracy training:   92.81%
+2025-03-13 23:37:11,030 - accuracy validation: 86.81%
+2025-03-13 23:37:11,030 - 	NOTE: Get the last min_loss_weights at epoch 16
+2025-03-13 23:37:24,714 - Epoch number 17:
+2025-03-13 23:40:12,678 - train_loss = 6.500981994796308e-05
+2025-03-13 23:40:12,679 - val_loss =   0.00018507495700480428
+2025-03-13 23:40:12,679 - accuracy training:   93.20%
+2025-03-13 23:40:12,679 - accuracy validation: 88.78%
+2025-03-13 23:40:12,679 - 	NOTE: Get the last min_loss_weights at epoch 17
+2025-03-13 23:40:19,510 - Epoch number 18:
+2025-03-13 23:44:36,852 - train_loss = 6.335912290454712e-05
+2025-03-13 23:44:36,852 - val_loss =   0.00021527518056787067
+2025-03-13 23:44:36,853 - accuracy training:   93.14%
+2025-03-13 23:44:36,853 - accuracy validation: 83.80%
+2025-03-13 23:44:36,853 - 	NOTE: Get the last min_loss_weights at epoch 18
+2025-03-13 23:44:44,071 - Epoch number 19:
+2025-03-13 23:48:25,782 - train_loss = 5.540683019965192e-05
+2025-03-13 23:48:25,782 - val_loss =   0.00017954605404717195
+2025-03-13 23:48:25,782 - accuracy training:   93.68%
+2025-03-13 23:48:25,782 - accuracy validation: 88.33%
+2025-03-13 23:48:25,782 - 	NOTE: Get the last min_loss_weights at epoch 19
+2025-03-13 23:48:32,982 - Epoch number 20:
+2025-03-13 23:52:57,873 - train_loss = 5.4252061919981446e-05
+2025-03-13 23:52:57,873 - val_loss =   0.00019134786572000406
+2025-03-13 23:52:57,873 - accuracy training:   93.83%
+2025-03-13 23:52:57,873 - accuracy validation: 84.22%
+2025-03-13 23:52:57,873 - 	NOTE: Get the last min_loss_weights at epoch 20
+2025-03-13 23:53:04,461 - Epoch number 21:
+2025-03-13 23:56:22,498 - train_loss = 5.1216993958633335e-05
+2025-03-13 23:56:22,498 - val_loss =   0.00016918534851523094
+2025-03-13 23:56:22,498 - accuracy training:   93.90%
+2025-03-13 23:56:22,498 - accuracy validation: 87.65%
+2025-03-13 23:56:22,498 - 	NOTE: Get the last min_loss_weights at epoch 21
+2025-03-13 23:56:29,855 - Epoch number 22:
+2025-03-13 23:59:41,743 - train_loss = 4.469010960676608e-05
+2025-03-13 23:59:41,743 - val_loss =   0.00017353197218709102
+2025-03-13 23:59:41,743 - accuracy training:   94.44%
+2025-03-13 23:59:41,743 - accuracy validation: 87.99%
+2025-03-13 23:59:41,743 - 	NOTE: Get the last min_loss_weights at epoch 22
+2025-03-13 23:59:48,324 - Epoch number 23:
+2025-03-14 00:02:29,194 - train_loss = 4.338361244520381e-05
+2025-03-14 00:02:29,194 - val_loss =   0.0001696335681336347
+2025-03-14 00:02:29,194 - accuracy training:   94.46%
+2025-03-14 00:02:29,194 - accuracy validation: 88.76%
+2025-03-14 00:02:29,194 - 	NOTE: Get the last min_loss_weights at epoch 23
+2025-03-14 00:02:36,478 - Epoch number 24:
+2025-03-14 00:05:16,176 - train_loss = 4.2158553912156545e-05
+2025-03-14 00:05:16,176 - val_loss =   0.00017259086365520863
+2025-03-14 00:05:16,176 - accuracy training:   94.57%
+2025-03-14 00:05:16,176 - accuracy validation: 88.17%
+2025-03-14 00:05:16,176 - 	NOTE: Get the last min_loss_weights at epoch 24
+2025-03-14 00:05:23,382 - Epoch number 25:
+2025-03-14 00:08:02,236 - train_loss = 4.0763887564760074e-05
+2025-03-14 00:08:02,237 - val_loss =   0.00017654049076450137
+2025-03-14 00:08:02,237 - accuracy training:   94.68%
+2025-03-14 00:08:02,237 - accuracy validation: 87.44%
+2025-03-14 00:08:02,237 - 	NOTE: Get the last min_loss_weights at epoch 25
+2025-03-14 00:08:08,934 - Epoch number 26:
+2025-03-14 00:10:48,545 - train_loss = 4.030606114273967e-05
+2025-03-14 00:10:48,545 - val_loss =   0.0001784291366501467
+2025-03-14 00:10:48,545 - accuracy training:   94.84%
+2025-03-14 00:10:48,545 - accuracy validation: 86.01%
+2025-03-14 00:10:48,545 - 	NOTE: Get the last min_loss_weights at epoch 26
+2025-03-14 00:10:55,285 - Epoch number 27:
+2025-03-14 00:13:35,113 - train_loss = 4.106030367737117e-05
+2025-03-14 00:13:35,114 - val_loss =   0.00017245476260380077
+2025-03-14 00:13:35,114 - accuracy training:   94.87%
+2025-03-14 00:13:35,114 - accuracy validation: 88.82%
+2025-03-14 00:13:39,651 - Epoch number 28:
+2025-03-14 00:16:19,242 - train_loss = 3.764386802460632e-05
+2025-03-14 00:16:19,242 - val_loss =   0.00015321203562599403
+2025-03-14 00:16:19,242 - accuracy training:   95.07%
+2025-03-14 00:16:19,243 - accuracy validation: 87.94%
+2025-03-14 00:16:19,243 - 	NOTE: Get the last min_loss_weights at epoch 28
+2025-03-14 00:16:26,478 - Epoch number 29:
+2025-03-14 00:19:05,258 - train_loss = 3.726796715262541e-05
+2025-03-14 00:19:05,258 - val_loss =   0.0001513784356242821
+2025-03-14 00:19:05,258 - accuracy training:   95.08%
+2025-03-14 00:19:05,258 - accuracy validation: 89.09%
+2025-03-14 00:19:05,258 - 	NOTE: Get the last min_loss_weights at epoch 29
+2025-03-14 00:19:12,410 - Epoch number 30:
+2025-03-14 00:21:51,738 - train_loss = 3.3884131419342086e-05
+2025-03-14 00:21:51,738 - val_loss =   0.00016889752880089743
+2025-03-14 00:21:51,738 - accuracy training:   95.33%
+2025-03-14 00:21:51,738 - accuracy validation: 86.18%
+2025-03-14 00:21:51,738 - 	NOTE: Get the last min_loss_weights at epoch 30
+2025-03-14 00:21:58,436 - Epoch number 31:
+2025-03-14 00:24:38,196 - train_loss = 3.052478865119518e-05
+2025-03-14 00:24:38,196 - val_loss =   0.00014467995994160536
+2025-03-14 00:24:38,196 - accuracy training:   95.63%
+2025-03-14 00:24:38,196 - accuracy validation: 90.57%
+2025-03-14 00:24:38,196 - 	NOTE: Get the last min_loss_weights at epoch 31
+2025-03-14 00:24:45,248 - Epoch number 32:
+2025-03-14 00:27:24,969 - train_loss = 3.278025200547324e-05
+2025-03-14 00:27:24,969 - val_loss =   0.00016736347906779676
+2025-03-14 00:27:24,969 - accuracy training:   95.34%
+2025-03-14 00:27:24,969 - accuracy validation: 87.73%
+2025-03-14 00:27:29,872 - Epoch number 33:
+2025-03-14 00:30:09,559 - train_loss = 2.5643181880027266e-05
+2025-03-14 00:30:09,560 - val_loss =   0.000150797136740828
+2025-03-14 00:30:09,560 - accuracy training:   95.98%
+2025-03-14 00:30:09,560 - accuracy validation: 89.84%
+2025-03-14 00:30:09,560 - 	NOTE: Get the last min_loss_weights at epoch 33
+2025-03-14 00:30:23,031 - Epoch number 34:
+2025-03-14 00:35:49,554 - train_loss = 2.9376701884249026e-05
+2025-03-14 00:35:49,554 - val_loss =   0.00017908050990577684
+2025-03-14 00:35:49,554 - accuracy training:   95.69%
+2025-03-14 00:35:49,554 - accuracy validation: 86.84%
+2025-03-14 00:35:54,209 - Epoch number 35:
+2025-03-14 00:38:34,168 - train_loss = 3.0137942535104133e-05
+2025-03-14 00:38:34,168 - val_loss =   0.00014438040162863958
+2025-03-14 00:38:34,168 - accuracy training:   95.65%
+2025-03-14 00:38:34,168 - accuracy validation: 89.61%
+2025-03-14 00:38:38,707 - Epoch number 36:
+2025-03-14 00:41:18,490 - train_loss = 2.980646029800648e-05
+2025-03-14 00:41:18,490 - val_loss =   0.00017910721301489478
+2025-03-14 00:41:18,490 - accuracy training:   95.64%
+2025-03-14 00:41:18,490 - accuracy validation: 85.90%
+2025-03-14 00:41:23,415 - Epoch number 37:
+2025-03-14 00:45:26,212 - train_loss = 2.625338234599532e-05
+2025-03-14 00:45:26,212 - val_loss =   0.00015960369510253727
+2025-03-14 00:45:26,213 - accuracy training:   95.90%
+2025-03-14 00:45:26,213 - accuracy validation: 87.91%
+2025-03-14 00:45:30,682 - Epoch number 38:
+2025-03-14 00:48:21,224 - train_loss = 2.5887914587783215e-05
+2025-03-14 00:48:21,225 - val_loss =   0.00015585281407835513
+2025-03-14 00:48:21,225 - accuracy training:   95.75%
+2025-03-14 00:48:21,225 - accuracy validation: 88.58%
+2025-03-14 00:48:25,402 - Epoch number 39:
+2025-03-14 00:51:05,168 - train_loss = 2.7147471559378544e-05
+2025-03-14 00:51:05,168 - val_loss =   0.0001797710425764115
+2025-03-14 00:51:05,168 - accuracy training:   95.75%
+2025-03-14 00:51:05,168 - accuracy validation: 90.75%
+2025-03-14 00:51:09,897 - Epoch number 40:
+2025-03-14 00:54:24,048 - train_loss = 3.114052558552089e-05
+2025-03-14 00:54:24,048 - val_loss =   0.00015464637533350105
+2025-03-14 00:54:24,048 - accuracy training:   95.59%
+2025-03-14 00:54:24,048 - accuracy validation: 90.49%
+2025-03-14 00:54:28,753 - Epoch number 41:
+2025-03-14 00:57:40,966 - train_loss = 2.779606369782326e-05
+2025-03-14 00:57:40,966 - val_loss =   0.000198826049011128
+2025-03-14 00:57:40,966 - accuracy training:   95.90%
+2025-03-14 00:57:40,966 - accuracy validation: 83.95%
+2025-03-14 00:57:45,864 - Epoch number 42:
+2025-03-14 01:00:25,115 - train_loss = 2.4292467780352753e-05
+2025-03-14 01:00:25,115 - val_loss =   0.00013006862477438436
+2025-03-14 01:00:25,115 - accuracy training:   96.08%
+2025-03-14 01:00:25,115 - accuracy validation: 90.80%
+2025-03-14 01:00:25,115 - 	NOTE: Get the last min_loss_weights at epoch 42
+2025-03-14 01:00:45,093 - Epoch number 43:
+2025-03-14 01:04:47,987 - train_loss = 2.6236617595141495e-05
+2025-03-14 01:04:47,987 - val_loss =   0.00015575765150122994
+2025-03-14 01:04:47,987 - accuracy training:   95.88%
+2025-03-14 01:04:47,987 - accuracy validation: 89.89%
+2025-03-14 01:04:52,369 - Epoch number 44:
+2025-03-14 01:07:32,815 - train_loss = 2.4381523914247583e-05
+2025-03-14 01:07:32,815 - val_loss =   0.0001491625474080744
+2025-03-14 01:07:32,815 - accuracy training:   96.16%
+2025-03-14 01:07:32,815 - accuracy validation: 89.10%
+2025-03-14 01:07:37,798 - Epoch number 45:
+2025-03-14 01:10:17,367 - train_loss = 2.961195550842323e-05
+2025-03-14 01:10:17,368 - val_loss =   0.00015798480734425168
+2025-03-14 01:10:17,368 - accuracy training:   95.89%
+2025-03-14 01:10:17,368 - accuracy validation: 87.95%
+2025-03-14 01:10:21,962 - Epoch number 46:
+2025-03-14 01:13:02,316 - train_loss = 2.2321224661778833e-05
+2025-03-14 01:13:02,316 - val_loss =   0.00013906788137492578
+2025-03-14 01:13:02,316 - accuracy training:   96.32%
+2025-03-14 01:13:02,316 - accuracy validation: 89.90%
+2025-03-14 01:13:02,316 - 	NOTE: Get the last min_loss_weights at epoch 46
+2025-03-14 01:13:09,343 - Epoch number 47:
+2025-03-14 01:15:53,838 - train_loss = 2.069918224650654e-05
+2025-03-14 01:15:53,838 - val_loss =   0.0001474284494099761
+2025-03-14 01:15:53,838 - accuracy training:   96.48%
+2025-03-14 01:15:53,838 - accuracy validation: 88.94%
+2025-03-14 01:15:53,838 - 	NOTE: Get the last min_loss_weights at epoch 47
+2025-03-14 01:16:01,294 - Epoch number 48:
+2025-03-14 01:19:03,038 - train_loss = 1.8948708811042818e-05
+2025-03-14 01:19:03,039 - val_loss =   0.00017191151301442824
+2025-03-14 01:19:03,039 - accuracy training:   96.56%
+2025-03-14 01:19:03,039 - accuracy validation: 88.87%
+2025-03-14 01:19:03,039 - 	NOTE: Get the last min_loss_weights at epoch 48
+2025-03-14 01:19:10,268 - Epoch number 49:
+2025-03-14 01:22:25,533 - train_loss = 2.0844033170557642e-05
+2025-03-14 01:22:25,534 - val_loss =   0.0001582195223779506
+2025-03-14 01:22:25,534 - accuracy training:   96.37%
+2025-03-14 01:22:25,534 - accuracy validation: 87.61%
+2025-03-14 01:22:31,206 - Training finished.
+2025-03-14 01:22:31,207 - The smallest loss achieved is 1.8948708811042818e-05 at epoch 48.
+2025-03-14 01:22:31,207 - Total time of training: 2 hours, 43 minutes, 32 seconds.
+2025-03-14 01:22:31,207 - ---------------------------------------------------------------------------------
+2025-03-14 01:22:31,736 - Evaluate with two model_weights:
+2025-03-14 01:22:31,737 - < Test dataset >
+2025-03-14 01:54:15,709 - Accuracy with last weight: 87.13%
+2025-03-14 01:54:15,709 - Loss with last weight: 0.00015590
+2025-03-14 01:54:50,288 - Accuracy with min_loss weight: 88.82%
+2025-03-14 01:54:50,288 - Loss with min_loss weight: 0.00017509

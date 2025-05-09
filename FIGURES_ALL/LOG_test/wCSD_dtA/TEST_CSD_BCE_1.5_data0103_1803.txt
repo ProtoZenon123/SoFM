@@ -1,0 +1,18 @@
+2025-03-18 13:07:05,352 - Starting new training session
+2025-03-18 13:07:05,352 - Evaluate with two model_weights:
+2025-03-18 13:08:08,929 - Type model * type dts: wCSD_dtA
+2025-03-18 13:08:08,929 - Model: CSD_BCE_1.5
+2025-03-18 13:08:08,929 - Data test: data0103
+2025-03-18 13:08:08,930 - Accuracy with last weight: 82.02%
+2025-03-18 13:08:08,930 - Loss with last weight: 0.00228050
+2025-03-18 13:09:19,235 - Accuracy with min_loss weight: 83.81%
+2025-03-18 13:09:19,235 - Loss with min_loss weight: 0.00260483
+2025-03-18 13:10:02,198 - Starting new training session
+2025-03-18 13:10:02,198 - Evaluate with two model_weights:
+2025-03-18 13:10:23,435 - Type model * type dts: wCSD_dtA
+2025-03-18 13:10:23,436 - Model: CSD_BCE_1.5
+2025-03-18 13:10:23,436 - Data test: data0103
+2025-03-18 13:10:23,436 - Accuracy with last weight: 82.02%
+2025-03-18 13:10:23,436 - Loss with last weight: 0.00234158
+2025-03-18 13:10:41,401 - Accuracy with min_loss weight: 83.81%
+2025-03-18 13:10:41,401 - Loss with min_loss weight: 0.00262019

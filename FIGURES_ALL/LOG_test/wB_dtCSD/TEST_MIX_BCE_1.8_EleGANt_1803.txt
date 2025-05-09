@@ -1,0 +1,9 @@
+2025-03-18 17:31:30,134 - Starting new training session
+2025-03-18 17:31:30,134 - Evaluate with two model_weights:
+2025-03-18 17:32:20,369 - Type model * type dts: wB_dtCSD
+2025-03-18 17:32:20,369 - Model: MIX_BCE_1.8
+2025-03-18 17:32:20,369 - Data test: EleGANt
+2025-03-18 17:32:20,369 - Accuracy with last weight: 96.05%
+2025-03-18 17:32:20,370 - Loss with last weight: 0.00042383
+2025-03-18 17:32:58,392 - Accuracy with min_loss weight: 94.35%
+2025-03-18 17:32:58,392 - Loss with min_loss weight: 0.00059583
