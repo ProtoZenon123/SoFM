@@ -1,0 +1,15 @@
+# model: BCE, contrast_inter, contrast_origin
+MODEL_TYPE: BCE
+
+# hyper param
+hyper_param:
+  NUM_FEATURES : 64
+  CHANNELS_IMG : 3
+  MARGIN : 1.5
+  THRESHOLD : 0.5
+  CUDA_ID : 0
+
+COMPONENT: all
+FIGURES : downgrade_cropped
+CHECKPOINTS : checkpoints_DATA_A_150k
+CHECKPOINT_NAME: min_loss_checkpoint.pth

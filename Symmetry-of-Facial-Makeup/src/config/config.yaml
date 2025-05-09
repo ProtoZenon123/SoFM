@@ -1,0 +1,24 @@
+# model
+MODEL_TYPE: BCE
+
+# hyper param
+hyper_param:
+  TRAIN_BATCH_SIZE : 64
+  TRAIN_NUM_EPOCHS : 10
+  LEARNING_RATE : 0.00005
+  NUM_FEATURES : 64
+  CHANNELS_IMG : 3
+  MARGIN : 1.5
+  THRESHOLD : 0.5
+  CUDA_ID : 0
+  WEIGHT_DECAY : 0.0002
+
+# dataset and report
+DATASET : 
+  NAME: 
+  COMPONENT: all
+FIGURES : figures_small_data_clean_code
+CHECKPOINTS : checkpointssmall_data_clean_code
+
+# training
+is_pretrained: False
